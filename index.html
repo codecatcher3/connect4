@@ -1,0 +1,151 @@
+<html>
+<title>
+The classic game of Connect 4
+</title>
+<script type="text/javascript" src="brython.js"></script>
+<script type="text/javascript" src="brython_stdlib.js"></script>
+<body onload="brython()">
+<h1>
+The classic game of Connect 4
+</h1>
+<button id="startgame">Start Game</button>
+<button id="against">Playing against human</button>
+    
+<div align="center">
+<p id="showstatus"></p>
+<canvas id="gamearea" width=300 height=300></canvas>
+</div>
+<hr>
+<p>&copy; Copyright Chong Shang Shan<br>
+Released under the GNU Public License<br>
+Using the Brython engine.</p>
+    
+<!-- script type="text/python" src="connect4.py"></script -->
+
+<script type="text/python">
+from browser import document, html, alert
+from browser import timer
+import math
+import random
+from connect4 import *
+
+canvas = document["gamearea"]
+ctx = canvas.getContext("2d")
+
+box_width = 30
+box_height = 30
+box_radius = 20/2
+zero_x = 40
+zero_y = 40
+
+COLORS = ("black", "red", "blue")
+
+def box(i,j):
+    return box_width*i+zero_x, box_width*(i+1)+zero_x, \
+           box_height*j+zero_y, box_height*(j+1)+zero_y
+
+def drawCell(i,j,color):
+    x1,x2,y1,y2 = box(i,j)
+    cx,cy = (x1+x2)/2, (y1+y2)/2
+    ctx.lineWidth = 1
+    ctx.fillStyle = color
+    ctx.beginPath()
+    ctx.arc(cx, cy, box_radius, 0, 2 * math.pi)
+    ctx.stroke()
+    ctx.fill()
+
+ctx.fillStyle = "#008000"
+ctx.fillRect( zero_x - box_width/2 - box_width/2, zero_y - box_height/2 - box_height/2, 
+              zero_x + box_width*7 + box_width/2, zero_y + box_height*7 + box_height/2  )
+
+thinkahead = 4
+B = board()
+B.empty()
+
+def show_tomove():
+    a = ("%s to move." % COLORS[B.ccolor])
+    document["showstatus"].text = a
+
+def show_wins():
+    a = ("%s wins!" % COLORS[B.wincolor])
+    document["showstatus"].text = a
+
+def drawScreen():
+    "print a board on the screen"
+    print("drawScreen()")
+    show_tomove()
+    for i in range(7):
+      for j in range(7):
+        drawCell(i,j, COLORS[B.pos(i,j)] )
+
+def start_game():
+    B.empty()
+    drawScreen()
+
+document['startgame'].bind('click', start_game)
+
+opponent_human = True
+
+def switch_opponent():
+    global opponent_human
+    opponent_human = not opponent_human
+    if opponent_human:
+        document['against'].text = "Playing against human"
+    else:
+        document['against'].text = "Playing against computer"
+
+document['against'].bind('click', switch_opponent)
+    
+drawScreen()
+
+mouse_input = True
+def mouse_clicked(ev):
+    if mouse_input and not B.gameover:
+	rect = canvas.getBoundingClientRect()
+        x = float(ev.clientX - rect.left)
+        y = float(ev.clientY - rect.top)
+        if 0 <= y < zero_y:
+            col = int(round((x - zero_x)/box_width + 0.5)) - 1
+            if 0 <= col < 7:
+                mouse_drop(col)
+    
+document['gamearea'].bind('click', mouse_clicked)
+
+def mouse_drop(c):
+    print("drop "+str(c))
+    if not B.gameover and not B.drop(c):
+        print("Cannot drop in column " + str(c) )
+    else:
+        drawScreen()
+
+        if B.gameover:
+            show_wins()
+        elif not opponent_human:
+            print("thinking ...")
+            B.makemove(thinkahead)
+            show_tomove()
+    
+
+flashing = False
+flash_id = None
+flash_colors = ["white", "black"]
+flash_i = 0
+def flash_line():
+    if flashing:
+        i,j = 0,0
+        global flash_i
+        flash_i = (flash_i+1) % len(flash_colors)
+        for k in range(4):
+            drawCell(i,j+k, flash_colors[flash_i] )
+        timer.set_timeout(flash_line, 500)
+    else:
+        timer.clear_timeout(flashid)
+        flash_id = None
+
+
+#flash_id = timer.set_timeout(flash_line, 500)
+#flashing = True
+</script>
+</body>    
+</html>
+
