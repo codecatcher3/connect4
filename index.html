@@ -79,6 +79,7 @@ def drawScreen():
         drawCell(i,j, COLORS[B.pos(i,j)] )
 
 def start_game():
+    flash(None)
     B.empty()
     drawScreen()
 
@@ -119,32 +120,41 @@ def mouse_drop(c):
         drawScreen()
 
         if B.gameover:
+            flash([(4,4)])
             show_wins()
         elif not opponent_human:
             print("thinking ...")
             B.makemove(thinkahead)
             show_tomove()
-    
+
 
 flashing = False
-flash_id = None
-flash_colors = ["white", "black"]
-flash_i = 0
-def flash_line():
-    if flashing:
-        i,j = 0,0
-        global flash_i
-        flash_i = (flash_i+1) % len(flash_colors)
-        for k in range(4):
-            drawCell(i,j+k, flash_colors[flash_i] )
-        timer.set_timeout(flash_line, 500)
+flash_coord = []
+flash_timerid = None
+flash_cycle = False
+
+def flash(coord):
+    if coord:
+        flash_coord = coord
+        flash_timerid = timer.set_timeout(flash_em, 500)
+        flashing = True
+        flash_cycle = True
     else:
-        timer.clear_timeout(flashid)
-        flash_id = None
+        flashing = False
+
+def flash_em():
+    if flashing:
+        for i,j in flash_coord:
+            drawCell(i,j, B.pos(i,j) if flash_cycle else "white" )
+        flash_cycle = not flash_cycle
+        timer.set_timeout(flash_em, 500)
+    else:
+        timer.clear_timeout(flash_timerid)
+        flash_timerid = None
+        flash_coord = []
+        flash_cycle = False
 
 
-#flash_id = timer.set_timeout(flash_line, 500)
-#flashing = True
 </script>
 </body>    
 </html>
