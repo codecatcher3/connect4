@@ -134,6 +134,10 @@ flash_timerid = None
 flash_cycle = False
 
 def flash(coord):
+    global flashing
+    global flash_coord
+    global flash_timerid
+    global flash_cycle
     if coord:
         flash_coord = coord
         flash_timerid = timer.set_timeout(flash_em, 500)
@@ -143,6 +147,10 @@ def flash(coord):
         flashing = False
 
 def flash_em():
+    global flashing
+    global flash_coord
+    global flash_timerid
+    global flash_cycle
     if flashing:
         for i,j in flash_coord:
             drawCell(i,j, B.pos(i,j) if flash_cycle else "white" )
