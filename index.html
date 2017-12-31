@@ -54,6 +54,7 @@ def drawCell(i,j,color):
     ctx.stroke()
     ctx.fill()
 
+# draw green field
 ctx.fillStyle = "#008000"
 ctx.fillRect( zero_x - box_width/2 - box_width/2, zero_y - box_height/2 - box_height/2, 
               zero_x + box_width*7 + box_width/2, zero_y + box_height*7 + box_height/2  )
@@ -77,6 +78,11 @@ def drawScreen():
     for i in range(7):
       for j in range(7):
         drawCell(i,j, COLORS[B.pos(i,j)] )
+
+flashing = False
+flash_coord = []
+flash_timerid = None
+flash_cycle = False
 
 def start_game():
     flash(None)
@@ -120,18 +126,13 @@ def mouse_drop(c):
         drawScreen()
 
         if B.gameover:
-            flash([(4,4)])
+            flash([(3,3)])
             show_wins()
         elif not opponent_human:
             print("thinking ...")
             B.makemove(thinkahead)
             show_tomove()
 
-
-flashing = False
-flash_coord = []
-flash_timerid = None
-flash_cycle = False
 
 def flash(coord):
     global flashing
