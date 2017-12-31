@@ -153,6 +153,7 @@ def flash_em():
     global flash_timerid
     global flash_cycle
     if flashing:
+        print("cycle: ",flash_cycle)
         for i,j in flash_coord:
             drawCell(i,j, B.pos(i,j) if flash_cycle else "white" )
         flash_cycle = not flash_cycle
