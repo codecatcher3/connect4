@@ -85,7 +85,7 @@ flash_timerid = None
 flash_cycle = False
 
 def start_game():
-    flash(None)
+    # flash(None)
     B.empty()
     drawScreen()
 
@@ -126,7 +126,7 @@ def mouse_drop(c):
         drawScreen()
 
         if B.gameover:
-            flash([(3,3)])
+            # flash([(3,3)])
             show_wins()
         elif not opponent_human:
             print("thinking ...")
