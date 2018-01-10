@@ -25,9 +25,7 @@ EMPTY,RED,BLUE = range(3)
 def opposite(color):
     return [EMPTY,BLUE,RED][color]
 
-WIDTH = 7
-HEIGHT = 7
-LINELEN = 4
+WIDTH, HEIGHT, LINELEN = 7,7,4
 
 import copy
 import sys
