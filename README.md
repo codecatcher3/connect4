@@ -19,3 +19,16 @@ engine is used. The evaluation function is simply the sum of squares of the
 number of pieces formed in each line.
 
 I am aware that the code can be optimized further.
+
+Known Bug
+=============
+There is a bug in this implementation due to the choice of Brython
+as the rendering engine. This bug is a stack overflow bug as a result of too deep
+recursion into the game tree.
+
+A simple fix for the bug is to increase the memeory allocated for Brython.
+
+A better fix is to rewrite the recursive calls to save less context information,
+for example tail call optimization.
+
+All of this remains undone, as a exercise for YOU, dear programmer.
