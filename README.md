@@ -27,8 +27,10 @@ as the rendering engine. This bug is a stack overflow bug as a result of too dee
 recursion into the game tree.
 
 A simple fix for the bug is to increase the memeory allocated for Brython.
+A better fix is to rewrite the recursive calls to reduce the stack frame size.
+Tail call optimization might be a good thing, if you can figure out how to rewrite the
+code into that style.
 
-A better fix is to rewrite the recursive calls to save less context information,
-for example tail call optimization.
+All of this remains undone, as a exercise for the dear student programmer.
 
-All of this remains undone, as a exercise for YOU, dear programmer.
+The point of this code is education, and much seconadarily, profit.
