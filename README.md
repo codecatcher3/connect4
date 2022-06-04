@@ -11,7 +11,7 @@ the UI.
 
 I am aware that Connect-4 is trademarked. I am not making any money off
 this. Can you write A.I.? If you can't, don't sue someone else who can.
-The point of this code is education, and much seconadarily, profit.
+The point of this code is education, and much secondarily, profit.
 
 NOTE: The License change to the AGPLv3. This applies to all previous versions.
 
